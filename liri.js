@@ -21,12 +21,12 @@ function switches(action) {
             break;
         
         case "spotify-this-song":
-        song();
-        break;
+            song();
+            break;
         
         case "movie-this":
-        movie();
-        break;
+            movie();
+            break;
         
         case "do-what-it-says":
             doWhat();
@@ -61,11 +61,10 @@ function song() {
     spotify
         .search({ type: 'track', query: song, limit: 1 })
         .then(function(response) {
-            console.log(response);
-            // console.log(response.tracks.items.album);
-            // console.log(response.tracks.items.album.artists[0].name);
-            // console.log(response.tracks.items.album.album_type.name);
-            // console.log(response.tracks.items.album.album_type.external_urls.spotify);  
+            console.log("Band/Artist: " + response.tracks.items[0].artists[0].name);
+            console.log("Song's name: " + response.tracks.items[0].name);
+            console.log("Preview link: " + response.tracks.items[0].external_urls.spotify);
+            console.log("Album's name: " + response.tracks.items[0].album.name); 
     })
         .catch(function(err) {
             console.log(err);
@@ -101,12 +100,15 @@ function movie() {
 // pass command into switches()
 function doWhat() {
     fs.readFile('random.txt', 'UTF-8', function(err, data) {
-        console.log(data);
-        var dataArr = data.split(', ');
-        var txtCommand = dataArr[0];
-        // dataArr.unshift("node", 'liri.js');
-        toSearch = dataArr;
-        switches(txtCommand);
+        if (err) {
+            return console.log(err);
+        }
+        var dataArr = data;
+        console.log(dataArr[0]);
+        // var txtCommand = dataArr[0];
+        // dataArr.unshift("node ", "liri.js");
+        // toSearch = dataArr;
+        // switches(txtCommand);
     })
 }
 
