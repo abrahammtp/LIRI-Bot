@@ -41,7 +41,6 @@ switches(action);
 function concert() {
     var artist = process.argv.slice(3).join(" ");
     var bandsUrl = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp";
-    // console.log(bandsUrl);
 
     axios.get(bandsUrl).then(
         function(response) {
@@ -104,11 +103,16 @@ function doWhat() {
             return console.log(err);
         }
         var dataArr = data;
-        console.log(dataArr[0]);
-        // var txtCommand = dataArr[0];
-        // dataArr.unshift("node ", "liri.js");
-        // toSearch = dataArr;
-        // switches(txtCommand);
+        var dataArr = data.split(",");
+        console.log(dataArr);
+        var textCommand = dataArr[0]
+        var toSearch = dataArr[1];
+        console.log(textCommand);
+        console.log(toSearch);
+        song = toSearch;
+        movie = toSearch;
+        artist = toSearch;
+        switches(textCommand);
     })
 }
 
