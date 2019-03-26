@@ -14,6 +14,7 @@ var keys = require("./keys.js");
 
 var action = process.argv[2];
 var toSearch = process.argv.slice(3).join(" ");
+var divider = "\n------------------------------------------------------------\n\n";
 
 // We are now going to create switch-case statements for each thing to search (movies, bands, songs, concerts)
 function switches(action) {
@@ -48,11 +49,17 @@ function concert() {
         function (response) {
             var concerts = response.data;
             for (let i = 0; i < concerts.length; i++) {
-                console.log("Venue Name: " + concerts[i].venue.name);
-                console.log("Venue Location: " + concerts[i].venue.city);
-                var date = moment(concerts[i].datetime).format("L");
-                console.log("Date of Event: " + date);
-                console.log("----------------------------------------------------");
+                var concertData = [
+                    "Venue Name: " + concerts[i].venue.name,
+                    "Venue Location: " + concerts[i].venue.city,
+                    "Date of Event: " + moment(concerts[i].datetime).format("L"),
+                    "----------------------------------------------------",
+                ].join("\n\n");
+
+                console.log(concertData);
+                fs.appendFile("log.txt", concertData + divider, function(err) {
+                    if (err) throw err;
+                  })
             }
         }
     )
@@ -67,10 +74,17 @@ function song() {
     spotify
         .search({ type: 'track', query: song, limit: 1 })
         .then(function (response) {
-            console.log("Band/Artist: " + response.tracks.items[0].artists[0].name);
-            console.log("Song's name: " + response.tracks.items[0].name);
-            console.log("Preview link: " + response.tracks.items[0].external_urls.spotify);
-            console.log("Album's name: " + response.tracks.items[0].album.name);
+            var songData = [
+                "Band/Artist: " + response.tracks.items[0].artists[0].name,
+                "Song's name: " + response.tracks.items[0].name,
+                "Preview link: " + response.tracks.items[0].external_urls.spotify,
+                "Album's name: " + response.tracks.items[0].album.name,
+            ].join("\n\n");
+           
+            console.log(songData)
+            fs.appendFile("log.txt", songData + divider, function(err) {
+                if (err) throw err;
+              })
         })
         .catch(function (err) {
             console.log(err);
@@ -86,14 +100,21 @@ function movie() {
 
     axios.get(moviesUrl).then(
         function (response) {
-            console.log("Title: " + response.data.Title);
-            console.log("Came out in: " + response.data.Year);
-            console.log("IMDB's rating: " + response.data.imdbRating);
-            console.log("Rotten Tomatoes' rating: " + response.data.Ratings[1].Value);
-            console.log("The movie was produced in: " + response.data.Country);
-            console.log("The languages are: " + response.data.Language);
-            console.log("Plot: " + response.data.Plot);
-            console.log("Actors: " + response.data.Actors);
+            var movieData = [
+                "Title: " + response.data.Title,
+                "Came out in: " + response.data.Year,
+                "IMDB's rating: " + response.data.imdbRating,
+                "Rotten Tomatoes' rating: " + response.data.Ratings[1].Value,
+                "The movie was produced in: " + response.data.Country,
+                "The languages are: " + response.data.Language,
+                "Plot: " + response.data.Plot,
+                "Actors: " + response.data.Actors,
+            ].join("\n\n");
+
+            console.log(movieData);
+            fs.appendFile("log.txt", movieData + divider, function(err) {
+                if (err) throw err;
+              })
         }
     )
 }
