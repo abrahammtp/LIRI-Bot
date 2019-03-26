@@ -83,8 +83,6 @@ function movie() {
     var movie = toSearch;
 
     var moviesUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy";
-    console.log(moviesUrl);
-
 
     axios.get(moviesUrl).then(
         function (response) {
@@ -112,8 +110,6 @@ function doWhat() {
         var textCommand = dataArr[0];
         var textQuery = dataArr[1];
         textQuery = textQuery.replace(/"|'/gi, '');
-        console.log(textCommand);
-        console.log(textQuery);
         toSearch = textQuery;
         switches(textCommand);
     })
