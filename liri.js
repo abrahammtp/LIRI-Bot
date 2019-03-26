@@ -13,7 +13,7 @@ var keys = require("./keys.js");
 // Global variables
 
 var action = process.argv[2];
-// var toSearch = process.argv;
+var toSearch = process.argv.slice(3).join(" ");
 
 // We are now going to create switch-case statements for each thing to search (movies, bands, songs, concerts)
 function switches(action) {
@@ -41,7 +41,7 @@ switches(action);
 // If the "concert" function is called...
 
 function concert() {
-    var artist = process.argv.slice(3).join(" ");
+    var artist = toSearch;
     var bandsUrl = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp";
 
     axios.get(bandsUrl).then(
@@ -63,7 +63,7 @@ function concert() {
 function song() {
     var Spotify = require('node-spotify-api');
     var spotify = new Spotify(keys.spotify);
-    var song = process.argv.slice(3).join(" ");
+    var song = toSearch;
     spotify
         .search({ type: 'track', query: song, limit: 1 })
         .then(function (response) {
@@ -80,7 +80,7 @@ function song() {
 // If the "movie" function is called...
 
 function movie() {
-    var movie = process.argv.slice(3).join(" ");
+    var movie = toSearch;
 
     var moviesUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy";
     console.log(moviesUrl);
@@ -101,10 +101,6 @@ function movie() {
 }
 
 // If the "doWhat" function is called...
-// read command from txt file
-// parse command from string
-// pass command into switches()
-
 
 function doWhat() {
     fs.readFile('random.txt', 'UTF-8', function (err, data) {
@@ -112,27 +108,13 @@ function doWhat() {
             return console.log(err);
         }
         var dataArr = data;
-        dataArr = data.split(" , ");
-        console.log(dataArr);
+        dataArr = data.split(",");
         var textCommand = dataArr[0];
+        var textQuery = dataArr[1];
+        textQuery = textQuery.replace(/"|'/gi, '');
         console.log(textCommand);
-        
-        // var textCommand = dataArr[0]
-        // console.log(textCommand);
-        // console.log(toSearch);
-        // action = dataArr[0];
-        // switches(action);
+        console.log(textQuery);
+        toSearch = textQuery;
+        switches(textCommand);
     })
 }
-
-// var dataArr2 = dataArr[1].split(" ")
-
-//         console.log(dataArr2)
-//         action = dataArr[0];
-//         value = dataArr2[0]
-//         for (i = 1; i < dataArr2.length; i++) {
-//             value += "+" + dataArr2[i]
-//         }
-//         console.log(value)
-//         console.log(action)
-//         blah()
